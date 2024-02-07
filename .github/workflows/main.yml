@@ -5,20 +5,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'docs/**' # This will trigger the workflow only when changes occur within the 'docs' directory or its subdirectories
 
 jobs:
   dispatch:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check for changes in docs folder
-        id: check_docs_changes
-        uses: actions/changed-files@v1
-        with:
-          files: 'docs/**'
-
       - name: Dispatch Sync Event
-        if: steps.check_docs_changes.outputs.files-changed == 'true'
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PRIVATE_REPO }}
