@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout public repository
         uses: actions/checkout@v2
+
+      - name: Set Git Identity
+        run: |
+          git config user.email "anandaraj.raman@syncfusion.com"
+          git config user.name "AnandarajRaman"
       
       - name: Push changes to private repository
         uses: ad-m/github-push-action@master
