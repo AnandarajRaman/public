@@ -1,0 +1,19 @@
+name: Sync Public to Private
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dispatch Sync Event
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PRIVATE_REPO }}
+          repository: AnandarajRaman/private
+          event-type: sync-changes
+          client-payload: '{"source_repo": "AnandarajRaman/public"}'
