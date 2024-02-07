@@ -1,4 +1,4 @@
-name: Sync Public to Private
+name: Dispatch Sync Event
 
 on:
   push:
@@ -18,5 +18,4 @@ jobs:
           token: ${{ secrets.PRIVATE_REPO }}
           repository: AnandarajRaman/private
           event-type: sync-changes
-          client-payload: '{"source_repo": "AnandarajRaman/public"}
-          
+          client-payload: '{"source_repo": "AnandarajRaman/public"}'
