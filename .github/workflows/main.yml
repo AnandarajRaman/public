@@ -13,15 +13,12 @@ jobs:
     steps:
       - name: Check for changes in docs folder
         id: check_docs_changes
-        run: |
-          if git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | grep -q '^docs/'; then
-            echo "::set-output name=docs_changes::true"
-          else
-            echo "::set-output name=docs_changes::false"
-          fi
+        uses: actions/changed-files@v1
+        with:
+          files: 'docs/**'
 
       - name: Dispatch Sync Event
-        if: steps.check_docs_changes.outputs.docs_changes == 'true'
+        if: steps.check_docs_changes.outputs.files-changed == 'true'
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PRIVATE_REPO }}
