@@ -10,7 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check if Docs folder is modified
+        id: check_docs_modification
+        uses: actions/checkout@v2
+        with:
+          path: docs
+          fetch-depth: 0
+
       - name: Dispatch Sync Event
+        if: steps.check_docs_modification.outputs.modified
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PRIVATE_REPO }}
