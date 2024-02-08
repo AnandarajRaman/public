@@ -15,7 +15,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PRIVATE_REPO }}
-          repository: AnandarajRaman/private-repo
+          repository: AnandarajRaman/private
           event-type: sync-changes
           client-payload: '{"source_repo": "AnandarajRaman/public"}'
           
