@@ -5,8 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**' # This will trigger the workflow only when changes occur within the 'docs' directory or its subdirectories
-
+      - 'docs/**' 
 jobs:
   dispatch:
     runs-on: ubuntu-latest
@@ -18,4 +17,4 @@ jobs:
           token: ${{ secrets.PRIVATE_REPO }}
           repository: AnandarajRaman/private
           event-type: sync-changes
-          client-payload: '{"source_repo": "AnandarajRaman/public"}'# main.yml
+          client-payload: '{"source_repo": "AnandarajRaman/public"}'
