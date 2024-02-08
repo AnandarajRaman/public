@@ -1,2 +1,1 @@
-good bye hi
-hi
+good bye 
