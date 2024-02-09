@@ -5,19 +5,42 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**' 
+      - 'docs/**'
+
 jobs:
   dispatch:
     runs-on: ubuntu-latest
 
     steps:
+      # Dispatching an event to trigger synchronization
       - name: Dispatch Sync Event
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.PRIVATE_REPO }}
-          repository: AnandarajRaman/private
-          event-type: sync-changes
-          client-payload: '{"source_repo": "AnandarajRaman/public"}'
+          token: ${{ secrets.PRIVATE_REPO }} # Access token for the private repository
+          repository: AnandarajRaman/private # Target private repository
+          event-type: sync-changes # Event type to trigger synchronization
+          client-payload: '{"source_repo": "AnandarajRaman/public"}' # Payload indicating the source public repository
+
+# name: Sync Public to Private
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'docs/**' 
+# jobs:
+#   dispatch:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Dispatch Sync Event
+#         uses: peter-evans/repository-dispatch@v3
+#         with:
+#           token: ${{ secrets.PRIVATE_REPO }}
+#           repository: AnandarajRaman/private
+#           event-type: sync-changes
+#           client-payload: '{"source_repo": "AnandarajRaman/public"}'
           
 # name: Sync Public to Private
 
