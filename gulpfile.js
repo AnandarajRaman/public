@@ -5,15 +5,39 @@ const fs = require('fs');
 const path = require('path');
 
 // Task for linting Markdown files based on .markdownlint.json
-gulp.task('md-lint', function() {
-    return gulp.src('.markdownlint.json')
-        .pipe(markdownlint());
+gulp.task('md-lint', (done) => {
+    const options = {
+        files: sync(['*.md', './docs/**/*.md'], { cwd: process.cwd() }), // Adjusted file paths to include Markdown files in the 'docs' folder
+        config: require('.markdownlint.json') // Using the configuration from .markdownlint.json in the root directory
+    };
+    md(options, (result, err) => {
+        if (err && err.toString().length) {
+            console.error(err.toString());
+            process.exit(1);
+        } else {
+            console.log('\n*** Markdown Lint Succeeded ***\n');
+            done();
+        }
+    });
 });
 
 // Task for checking typos in Markdown files based on .spelling file
-gulp.task('typo', function() {
-    return gulp.src('.spelling')
-        .pipe(spellcheck());
+const { readFileSync } = require('fs');
+
+gulp.task('typo', (done) => {
+    try {
+        // Read the contents of the .spelling file
+        const spellingContent = readFileSync('./.spelling', 'utf8');
+
+        // Run mdspell command to check spelling in Markdown files of the docs folder
+        const mdspellcmd = `npx mdspell docs/**/*.md -r -n -a -x --color --en-us -d . --ignore-acronyms --ignore-numbers --ignore-acronyms --ignore-urls --ignore-emails ${spellingContent}`;
+        const output = execSync(mdspellcmd, { stdio: 'inherit' });
+
+        done();
+    } catch (error) {
+        console.error(error.message);
+        process.exit(1);
+    }
 });
 
 // Task for validating filenames
