@@ -23,6 +23,28 @@ gulp.task('md-lint', (done) => {
     });
 });
 
+function getSpelling() {
+    let spellingFile = join(__dirname + './spelling');
+    let spelling = existsSync(spellingFile) ? '\n' + readFileSync(spellingFile, 'utf8') : '';
+    return readFileSync('./.spelling', 'utf8') + spelling;
+}
+
+gulp.task('typo', (done) => {
+    // copy/paste .spelling file in .bin location
+    writeFileSync('./node_modules/.bin/.spelling', getSpelling());
+    // goto .bin location
+    cd('./node_modules/.bin/');
+    // run mdspell command
+    const mdspellcmd = `mdspell ../../docs/**/*.md  -r -n -a -x --color --en-us`;
+    const output = exec(mdspellcmd);
+    // return root location
+    cd('../../');
+    if (output.code !== 0) {
+        process.exit(1);
+    }
+    done();
+});
+
 // Task for validating filenames
 gulp.task('filename', (done) => {
     const docsPath = 'docs';
