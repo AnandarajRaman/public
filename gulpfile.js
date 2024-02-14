@@ -8,7 +8,7 @@ const { execSync } = require('child_process');
 // Task for linting Markdown files based on .markdownlint.json
 gulp.task('md-lint', (done) => {
     const options = {
-        files: ['*.md', 'docs/**/*.md'],
+        files: ['./docs/**/*.md'],
         config: require('./.markdownlint.json')
     };
 
