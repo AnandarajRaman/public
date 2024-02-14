@@ -5,7 +5,8 @@ const spellcheck = require('markdown-spellcheck');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
-
+const { writeFileSync, readFileSync, existsSync, mkdirSync } = require('fs');
+const { cd, exec } = require('shelljs');
 
 gulp.task('md-lint', (done) => {
     const options = {
