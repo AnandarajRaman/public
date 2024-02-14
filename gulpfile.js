@@ -1,9 +1,26 @@
 const gulp = require('gulp');
-const markdownlint = require('markdownlint');
+const md = require('markdownlint');
 const spellcheck = require('markdown-spellcheck');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+
+
+gulp.task('md-lint', (done) => {
+    const options = {
+        files: sync('*.md').concat(sync('./docs/**/*.md', { ignore: `./docs/**/${apiBaseFolder}/**/*.md` })),
+        config: require('./.markdownlint.json')
+    };
+    md(options, (result, err) => {
+        if (err && err.toString().length) {
+            console.error(err.toString());
+            process.exit(1);
+        } else {
+            console.log('\n*** Markdown Lint Succeeded ***\n');
+            done();
+        }
+    });
+});
 
 // Task for validating filenames
 gulp.task('filename', (done) => {
@@ -43,7 +60,7 @@ gulp.task('foldername', (done) => {
 });
 
 // Default task
-gulp.task('default', gulp.series('filename', 'foldername'));
+gulp.task('default', gulp.series('md-lint','filename', 'foldername'));
 
 
 
