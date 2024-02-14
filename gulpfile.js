@@ -9,7 +9,7 @@ const { execSync } = require('child_process');
 
 gulp.task('md-lint', (done) => {
     const options = {
-        files: sync('*.md').concat(sync('./docs/**/*.md', { ignore: `./docs/**/${apiBaseFolder}/**/*.md` })),
+        files: sync('*.md').concat(sync('./docs/**/*.md')),
         config: require('./.markdownlint.json')
     };
     md(options, (result, err) => {
