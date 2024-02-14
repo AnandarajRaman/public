@@ -1,32 +1,33 @@
-//gulpfile.js
 const gulp = require('gulp');
-const markdownlint = require('gulp-markdownlint');
-const spellcheck = require('gulp-markdown-spellcheck');
+const markdownlint = require('markdownlint');
+const spellcheck = require('markdown-spellcheck');
+const fs = require('fs');
+const path = require('path');
 const { execSync } = require('child_process');
-const { readFileSync } = require('fs');
 
 // Task for linting Markdown files based on .markdownlint.json
 gulp.task('md-lint', (done) => {
-    gulp.src(['*.md', './docs/**/*.md'])
-        .pipe(markdownlint({
-            config: require('./.markdownlint.json') // Using the configuration from .markdownlint.json in the root directory
-        }))
-        .pipe(markdownlint.reporter())
-        .on('error', function(err) {
+    const options = {
+        files: ['*.md', './docs/**/*.md'],
+        config: require('./.markdownlint.json')
+    };
+
+    markdownlint(options, (err, result) => {
+        if (err) {
             console.error(err.toString());
             process.exit(1);
-        })
-        .on('end', function() {
+        } else {
             console.log('\n*** Markdown Lint Succeeded ***\n');
             done();
-        });
+        }
+    });
 });
 
 // Task for checking typos in Markdown files based on .spelling file
 gulp.task('typo', (done) => {
     try {
         // Read the contents of the .spelling file
-        const spellingContent = readFileSync('./.spelling', 'utf8');
+        const spellingContent = fs.readFileSync('./.spelling', 'utf8');
 
         // Run mdspell command to check spelling in Markdown files of the docs folder
         const mdspellcmd = `npx mdspell docs/**/*.md -r -n -a -x --color --en-us -d . --ignore-acronyms --ignore-numbers --ignore-urls --ignore-emails ${spellingContent}`;
@@ -40,10 +41,9 @@ gulp.task('typo', (done) => {
 });
 
 // Task for validating filenames
-gulp.task('filename', function(done) {
+gulp.task('filename', (done) => {
     const docsPath = 'docs';
     const files = fs.readdirSync(docsPath);
-    let error = false;
 
     files.forEach(file => {
         const fileName = path.basename(file);
@@ -51,36 +51,29 @@ gulp.task('filename', function(done) {
 
         if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
             console.error(`Error: Invalid filename detected: ${fileName}`);
-            error = true;
+            process.exit(1);
         }
     });
 
-    if (error) {
-        process.exit(1);
-    }
-
+    console.log('\n*** Filename Validation Succeeded ***\n');
     done();
 });
 
 // Task for validating folder names
-gulp.task('foldername', function(done) {
+gulp.task('foldername', (done) => {
     const docsPath = 'docs';
     const folders = fs.readdirSync(docsPath);
-    let error = false;
 
     folders.forEach(folder => {
         if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
 
         if (folder !== folder.toLowerCase()) {
             console.error(`Error: Invalid folder name detected: ${folder}`);
-            error = true;
+            process.exit(1);
         }
     });
 
-    if (error) {
-        process.exit(1);
-    }
-
+    console.log('\n*** Foldername Validation Succeeded ***\n');
     done();
 });
 
