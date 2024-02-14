@@ -23,7 +23,6 @@ jobs:
       # Run Gulp tasks for validation
       - name: Run Gulp tasks
         run: npx gulp
-        continue-on-error: true
 
       # Check if Gulp tasks passed successfully
       - name: Check Gulp tasks status
@@ -44,6 +43,7 @@ jobs:
           repository: AnandarajRaman/private # Target private repository
           event-type: sync-changes # Event type to trigger synchronization
           client-payload: '{"source_repo": "AnandarajRaman/public"}' # Payload indicating the source public repository
+
 
 
 
