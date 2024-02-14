@@ -5,6 +5,55 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+// Task for validating filenames
+gulp.task('filename', (done) => {
+    const docsPath = 'docs';
+    const files = fs.readdirSync(docsPath);
+
+    files.forEach(file => {
+        const fileName = path.basename(file);
+        const fileNameWithoutExt = fileName.split('.')[0];
+
+        if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
+            console.error(`Error: Invalid filename detected: ${fileName}`);
+            process.exit(1);
+        }
+    });
+
+    console.log('\n*** Filename Validation Succeeded ***\n');
+    done();
+});
+
+// Task for validating folder names
+gulp.task('foldername', (done) => {
+    const docsPath = 'docs';
+    const folders = fs.readdirSync(docsPath);
+
+    folders.forEach(folder => {
+        if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
+
+        if (folder !== folder.toLowerCase()) {
+            console.error(`Error: Invalid folder name detected: ${folder}`);
+            process.exit(1);
+        }
+    });
+
+    console.log('\n*** Foldername Validation Succeeded ***\n');
+    done();
+});
+
+// Default task
+gulp.task('default', gulp.series('filename', 'foldername'));
+
+
+
+
+
+
+
+
+
+
 // // Task for linting Markdown files based on .markdownlint.json
 // gulp.task('md-lint', (done) => {
 //     const options = {
@@ -90,42 +139,3 @@ const { execSync } = require('child_process');
 //         done();
 //     });
 // });
-// Task for validating filenames
-gulp.task('filename', (done) => {
-    const docsPath = 'docs';
-    const files = fs.readdirSync(docsPath);
-
-    files.forEach(file => {
-        const fileName = path.basename(file);
-        const fileNameWithoutExt = fileName.split('.')[0];
-
-        if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
-            console.error(`Error: Invalid filename detected: ${fileName}`);
-            process.exit(1);
-        }
-    });
-
-    console.log('\n*** Filename Validation Succeeded ***\n');
-    done();
-});
-
-// Task for validating folder names
-gulp.task('foldername', (done) => {
-    const docsPath = 'docs';
-    const folders = fs.readdirSync(docsPath);
-
-    folders.forEach(folder => {
-        if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
-
-        if (folder !== folder.toLowerCase()) {
-            console.error(`Error: Invalid folder name detected: ${folder}`);
-            process.exit(1);
-        }
-    });
-
-    console.log('\n*** Foldername Validation Succeeded ***\n');
-    done();
-});
-
-// Default task
-gulp.task('default', gulp.series('filename', 'foldername'));
