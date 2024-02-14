@@ -83,7 +83,7 @@ gulp.task('foldername', (done) => {
 });
 
 // Default task
-gulp.task('default', gulp.series('md-lint','filename', 'foldername'));
+gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
 
 
 
