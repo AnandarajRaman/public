@@ -39,7 +39,57 @@ const { execSync } = require('child_process');
 //         process.exit(1);
 //     }
 // });
+gulp.task('markdown-lint', (done) => {
+    const docsPath = 'docs/**/*.md'; // Path to markdown files
 
+    // Options for markdownlint
+    const options = {
+        files: [docsPath],
+        config: require(path.resolve('.markdownlint.json')) // Load .markdownlint.json config
+    };
+
+    // Run markdownlint
+    markdownlint(options, (err, result) => {
+        if (err) {
+            console.error(err.toString());
+            process.exit(1);
+        }
+
+        if (result && result.toString()) {
+            console.log(result.toString());
+            process.exit(1);
+        }
+
+        console.log('Markdown linting succeeded.');
+        done();
+    });
+});
+
+gulp.task('spell-check', (done) => {
+    const docsPath = 'docs/**/*.md'; // Path to markdown files
+
+    // Options for spellcheck
+    const options = {
+        files: [docsPath],
+        dictionary: path.resolve('.spelling') // Path to .spelling dictionary file
+    };
+
+    // Run spellcheck
+    spellcheck(options, (err, result) => {
+        if (err) {
+            console.error(err.toString());
+            process.exit(1);
+        }
+
+        if (result && result.toString()) {
+            console.log(result.toString());
+            process.exit(1);
+        }
+
+        console.log('Spellcheck succeeded.');
+        done();
+    });
+});
 // Task for validating filenames
 gulp.task('filename', (done) => {
     const docsPath = 'docs';
@@ -78,4 +128,4 @@ gulp.task('foldername', (done) => {
 });
 
 // Default task
-gulp.task('default', gulp.series('filename', 'foldername'));
+gulp.task('default', gulp.series(`markdown-lint`,'spell-check','filename', 'foldername'));
