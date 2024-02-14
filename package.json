@@ -1,0 +1,13 @@
+{
+  "name": "markdown-validation",
+  "version": "1.0.0",
+  "description": "Validation tasks for Markdown files",
+  "scripts": {
+    "test": "gulp"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-markdownlint": "^3.0.1",
+    "gulp-markdown-spellcheck": "^2.1.0"
+  }
+}
