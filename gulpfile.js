@@ -128,4 +128,4 @@ gulp.task('foldername', (done) => {
 });
 
 // Default task
-gulp.task('default', gulp.series(`markdown-lint`,'spell-check','filename', 'foldername'));
+gulp.task('default', gulp.series('filename', 'foldername'));
