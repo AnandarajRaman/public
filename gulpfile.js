@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const { sync } = require('glob');
 const md = require('markdownlint');
 const spellcheck = require('markdown-spellcheck');
 const fs = require('fs');
