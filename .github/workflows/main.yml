@@ -1,3 +1,4 @@
+
 name: Sync Public to Private
 
 on:
@@ -12,37 +13,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      # Install npm dependencies
-      - name: Install npm dependencies
-        run: npm install
-
-      # Run Gulp tasks for validation
-      - name: Run Gulp tasks
-        run: npx gulp
-
-      # Check if Gulp tasks passed successfully
-      - name: Check Gulp tasks status
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "All Gulp tasks passed successfully."
-          else
-            echo "Error: Gulp tasks failed. Fix the issues and try again."
-            exit 1
-          fi
-
-      # Dispatching an event to trigger synchronization if Gulp tasks passed
+      # Dispatching an event to trigger synchronization
       - name: Dispatch Sync Event
-        if: success()
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PRIVATE_REPO }} # Access token for the private repository
           repository: AnandarajRaman/private # Target private repository
           event-type: sync-changes # Event type to trigger synchronization
           client-payload: '{"source_repo": "AnandarajRaman/public"}' # Payload indicating the source public repository
+
+
+# name: Sync Public to Private
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'docs/**'
+
+# jobs:
+#   dispatch:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # Checkout the repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+
+#       # Install npm dependencies
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       # Run Gulp tasks for validation
+#       - name: Run Gulp tasks
+#         run: npx gulp
+
+#       # Check if Gulp tasks passed successfully
+#       - name: Check Gulp tasks status
+#         run: |
+#           if [ $? -eq 0 ]; then
+#             echo "All Gulp tasks passed successfully."
+#           else
+#             echo "Error: Gulp tasks failed. Fix the issues and try again."
+#             exit 1
+#           fi
+
+#       # Dispatching an event to trigger synchronization if Gulp tasks passed
+#       - name: Dispatch Sync Event
+#         if: success()
+#         uses: peter-evans/repository-dispatch@v3
+#         with:
+#           token: ${{ secrets.PRIVATE_REPO }} # Access token for the private repository
+#           repository: AnandarajRaman/private # Target private repository
+#           event-type: sync-changes # Event type to trigger synchronization
+#           client-payload: '{"source_repo": "AnandarajRaman/public"}' # Payload indicating the source public repository
 
 
 
