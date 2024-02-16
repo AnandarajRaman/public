@@ -1,7 +1,4 @@
 hi
-
-
-
 hi
 hi
 hi
