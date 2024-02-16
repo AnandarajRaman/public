@@ -49,15 +49,15 @@ jobs:
 #       - name: Run Gulp tasks
 #         run: npx gulp
 
-#       # Check if Gulp tasks passed successfully
-#       - name: Check Gulp tasks status
-#         run: |
-#           if [ $? -eq 0 ]; then
-#             echo "All Gulp tasks passed successfully."
-#           else
-#             echo "Error: Gulp tasks failed. Fix the issues and try again."
-#             exit 1
-#           fi
+      # # Check if Gulp tasks passed successfully
+      # - name: Check Gulp tasks status
+      #   run: |
+      #     if [ $? -eq 0 ]; then
+      #       echo "All Gulp tasks passed successfully."
+      #     else
+      #       echo "Error: Gulp tasks failed. Fix the issues and try again."
+      #       exit 1
+      #     fi
 
 #       # Dispatching an event to trigger synchronization if Gulp tasks passed
 #       - name: Dispatch Sync Event
