@@ -1,0 +1,36 @@
+name: Gulp Test on Pull Request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  gulp_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Run Gulp tasks for validation
+        run: npx gulp
+
+      - name: Check Gulp tasks status
+        id: gulp_status
+        run: echo ::set-output name=status::$(if [ $? -eq 0 ]; then echo "success"; else echo "failure"; fi)
+
+  merge_prevention:
+    needs: gulp_test
+    if: ${{ needs.gulp_test.outputs.status == 'failure' }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fail Pull Request
+        run: |
+          echo "Gulp tests failed. This pull request cannot be merged."
+          exit 1
