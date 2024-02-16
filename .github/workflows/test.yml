@@ -18,19 +18,29 @@ jobs:
 
       - name: Run Gulp tasks for validation
         run: npx gulp
-
+        
       - name: Check Gulp tasks status
-        id: gulp_status
-        run: echo ::set-output name=status::$(if [ $? -eq 0 ]; then echo "success"; else echo "failure"; fi)
-
-  merge_prevention:
-    needs: gulp_test
-    if: ${{ needs.gulp_test.outputs.status == 'failure' }}
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Fail Pull Request
         run: |
-          echo "Gulp tests failed. This pull request cannot be merged."
-          exit 1
+          if [ $? -eq 0 ]; then
+            echo "All Gulp tasks passed successfully."
+          else
+            echo "Error: Gulp tasks failed. Fix the issues and try again."
+            exit 1
+          fi
+
+
+  #     - name: Check Gulp tasks status
+  #       id: gulp_status
+  #       run: echo ::set-output name=status::$(if [ $? -eq 0 ]; then echo "success"; else echo "failure"; fi)
+
+  # merge_prevention:
+  #   needs: gulp_test
+  #   if: ${{ needs.gulp_test.outputs.status == 'failure' }}
+
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Fail Pull Request
+  #       run: |
+  #         echo "Gulp tests failed. This pull request cannot be merged."
+  #         exit 1
