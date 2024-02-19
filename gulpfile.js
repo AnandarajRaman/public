@@ -22,7 +22,7 @@ gulp.task('ship-to-private', function (done) {
     var changes = shelljs.exec(`git diff --name-only`);
     var changedFileNames = changes.stdout.split('\n');
 
-    var docsChanges = changedFileNames.filter(fileName => fileName.startsWith('docs/'));
+  var docsChanges = changedFileNames.filter(fileName => fileName.includes('docs/'));
 
     // Check if there are any changes in the docs folder
     if (docsChanges.length === 0) {
