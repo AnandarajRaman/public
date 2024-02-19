@@ -58,7 +58,7 @@ gulp.task('ship-to-private', function (done) {
     for (var i = 0; i < changedFileNames.length; i++) {
         var changedFileName = changedFileNames[i];
         var relativePath = changedFileName.replace(/^docs\//, ''); // Remove 'docs/' from the file path to get the relative path within the docs folder
-        shelljs.cp('-rf', `../../${changedFileName}`, `./docs/${relativePath}`);
+        shelljs.cp('-rf', `../${changedFileName}`, `./docs/${relativePath}`);
     }
 
     // Commit and push changes to the private repo
@@ -71,7 +71,6 @@ gulp.task('ship-to-private', function (done) {
     // Cleanup: Remove the temporary clone directory
     shelljs.cd('..'); // Move out of the clone directory
     shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
-    shelljs.exec('ls');
     done();
 });
 
