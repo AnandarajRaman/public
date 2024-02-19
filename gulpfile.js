@@ -8,15 +8,54 @@ const { execSync } = require('child_process');
 const { writeFileSync, readFileSync, existsSync, mkdirSync } = require('fs');
 const { cd, exec } = require('shelljs');
 const { join } = require('path');
-
-// var fs = require('fs');
-// var gulp = require('gulp');
 var shelljs = require('shelljs');
 
 var user = process.env.GIT_USER;
 var token = process.env.GIT_TOKEN;
 var user_mail = process.env.GIT_MAIL;
 
+const spellings = [
+    'boldreports',
+    'datasource',
+    'postgresql',
+    'dataset',
+    'drilldown',
+    'programmatically',
+    'localhost',
+    'Employee_Dev',
+    'Employee_Staging',
+    'Company_Staging',
+    'Company_Dev',
+    'Company_Live',
+    'SaaS',
+    'Rijndael',
+    'RA-GRS',
+    'geo-redundant',
+    'Antimalware',
+    'PCI-certified',
+    'antimalware',
+    'opensource',
+    'userpassword',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1',
+    'YmhhLnN1a3VtYXJhbkBzeW5jZnVzaW9uLmNvbSIsIm5hbWVpZCI6IjEiLCJ1',
+    'bmlxdWVfbmFtZSI6ImM0NWFiZmE0LTBlNjAtNGI4Yy04NWM4LWMxNTBiOGJh',
+    'MjlkNyIsIklQIjoiOjoxIiwiaXNzdWVkX2RhdGUiOiIxNjMxNzEyOTYzIiwi',
+    'bmJmIjoxNjMxNzEyOTYzLCJleHAiOjE2MzIzMTc3NjMsImlhdCI6MTYzMTcx',
+    'Mjk2MywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MTc3OC9yZXBvcnRpbmcv',
+    'c2l0ZS9zaXRlOTEiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxNzc4L3Jl',
+    'cG9ydGluZy9zaXRlL3NpdGU5MSJ9.d24190nn6i2UNz_8hX1mI0JZTNO9zPX',
+    '1HYSlGClkUyw',
+    'serviceAuthorizationToken',
+    'serverurl',
+    'reportServiceUrl',
+    'reportPath',
+    'serviceUrl',
+    'whitelist',
+    'whitelisted',
+    'sharepoint',
+    'pre-flight',
+    'wildcard'
+];
 
 gulp.task('ship-to-private', function (done) {
 
@@ -197,6 +236,12 @@ gulp.task('ship-to-private', function (done) {
 // const { cd, exec } = require('shelljs');
 // const { join } = require('path');
 
+
+
+
+
+
+
 gulp.task('md-lint', (done) => {
     const options = {
         files: sync('*.md').concat(sync('./docs/**/*.md')),
@@ -213,27 +258,24 @@ gulp.task('md-lint', (done) => {
     });
 });
 
-function getSpelling() {
-    let spellingFile = join(__dirname + './spelling');
-    let spelling = existsSync(spellingFile) ? '\n' + readFileSync(spellingFile, 'utf8') : '';
-    return readFileSync('./.spelling', 'utf8') + spelling;
-}
-
 gulp.task('typo', (done) => {
-    // copy/paste .spelling file in .bin location
-    writeFileSync('./node_modules/.bin/.spelling', getSpelling());
-    // goto .bin location
+    // Write the spellings array to the .spelling file in the .bin location
+    writeFileSync('./node_modules/.bin/.spelling', spellings.join('\n'));
+    // Change directory to the .bin location
     cd('./node_modules/.bin/');
-    // run mdspell command
+    // Run the mdspell command to check for typos in markdown files
     const mdspellcmd = `mdspell ../../docs/**/*.md  -r -n -a -x --color --en-us`;
     const output = exec(mdspellcmd);
-    // return root location
+    // Return to the root directory
     cd('../../');
+    // Check the output of the mdspell command
     if (output.code !== 0) {
         process.exit(1);
     }
+    // Signal that the task is done
     done();
 });
+
 
 // Task for validating filenames
 gulp.task('filename', (done) => {
@@ -274,6 +316,96 @@ gulp.task('foldername', (done) => {
 
 // Default task
 gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+// gulp.task('md-lint', (done) => {
+//     const options = {
+//         files: sync('*.md').concat(sync('./docs/**/*.md')),
+//         config: require('./.markdownlint.json')
+//     };
+//     md(options, (result, err) => {
+//         if (err && err.toString().length) {
+//             console.error(err.toString());
+//             process.exit(1);
+//         } else {
+//             console.log('\n*** Markdown Lint Succeeded ***\n');
+//             done();
+//         }
+//     });
+// });
+
+// function getSpelling() {
+//     let spellingFile = join(__dirname + './spelling');
+//     let spelling = existsSync(spellingFile) ? '\n' + readFileSync(spellingFile, 'utf8') : '';
+//     return readFileSync('./.spelling', 'utf8') + spelling;
+// }
+
+// gulp.task('typo', (done) => {
+//     // copy/paste .spelling file in .bin location
+//     writeFileSync('./node_modules/.bin/.spelling', getSpelling());
+//     // goto .bin location
+//     cd('./node_modules/.bin/');
+//     // run mdspell command
+//     const mdspellcmd = `mdspell ../../docs/**/*.md  -r -n -a -x --color --en-us`;
+//     const output = exec(mdspellcmd);
+//     // return root location
+//     cd('../../');
+//     if (output.code !== 0) {
+//         process.exit(1);
+//     }
+//     done();
+// });
+
+// // Task for validating filenames
+// gulp.task('filename', (done) => {
+//     const docsPath = 'docs';
+//     const files = fs.readdirSync(docsPath);
+
+//     files.forEach(file => {
+//         const fileName = path.basename(file);
+//         const fileNameWithoutExt = fileName.split('.')[0];
+
+//         if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
+//             console.error(`Error: Invalid filename detected: ${fileName}`);
+//             process.exit(1);
+//         }
+//     });
+
+//     console.log('\n*** Filename Validation Succeeded ***\n');
+//     done();
+// });
+
+// // Task for validating folder names
+// gulp.task('foldername', (done) => {
+//     const docsPath = 'docs';
+//     const folders = fs.readdirSync(docsPath);
+
+//     folders.forEach(folder => {
+//         if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
+
+//         if (folder !== folder.toLowerCase()) {
+//             console.error(`Error: Invalid folder name detected: ${folder}`);
+//             process.exit(1);
+//         }
+//     });
+
+//     console.log('\n*** Foldername Validation Succeeded ***\n');
+//     done();
+// });
+
+// // Default task
+// gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
 
 
 
