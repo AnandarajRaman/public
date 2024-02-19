@@ -19,6 +19,13 @@ var user_mail = process.env.GIT_MAIL;
 
 
 gulp.task('ship-to-private', function (done) {
+
+    console.log('---check----' + user_mail);
+    console.log('---user---' + user);
+
+    shelljs.exec(`git config --global user.email "${user_mail}"`);
+    shelljs.exec(`git config --global user.name "${user}"`);
+    
     // Check for changes in the docs folder
     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
@@ -51,7 +58,7 @@ gulp.task('ship-to-private', function (done) {
     for (var i = 0; i < changedFileNames.length; i++) {
         var changedFileName = changedFileNames[i];
         var relativePath = changedFileName.replace(/^docs\//, ''); // Remove 'docs/' from the file path to get the relative path within the docs folder
-        shelljs.cp('-rf', `../../${changedFileName}`, `./docs/${relativePath}`);
+        shelljs.cp('-rf', `../../../${changedFileName}`, `./docs/${relativePath}`);
     }
 
     // Commit and push changes to the private repo
