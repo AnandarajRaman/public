@@ -17,7 +17,7 @@ jobs:
         run: npm install
 
       - name: Test
-        run: npx gulp
+        run: npm run test
 
 
 
