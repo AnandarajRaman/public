@@ -36,7 +36,7 @@ gulp.task('ship-to-private', function (done) {
         done();
         return;
     }
-
+    
     // Clone the private repository into a temporary directory
     var clonePath = './private-temp';
     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
@@ -50,10 +50,10 @@ gulp.task('ship-to-private', function (done) {
     }
 
     console.log('Clone of private repo completed.');
-
+    shelljs.exec('ls');
     // Copy changed files from the public docs folder to the private repo docs folder
     shelljs.cd(clonePath);
-
+    shelljs.exec('ls');
     // Copy only the changed files
     for (var i = 0; i < changedFileNames.length; i++) {
         var changedFileName = changedFileNames[i];
@@ -71,6 +71,7 @@ gulp.task('ship-to-private', function (done) {
     // Cleanup: Remove the temporary clone directory
     shelljs.cd('..'); // Move out of the clone directory
     shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
+    shelljs.exec('ls');
     done();
 });
 
