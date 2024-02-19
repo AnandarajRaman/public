@@ -7,8 +7,17 @@ var token = process.env.GIT_TOKEN;
 var user_mail = process.env.GIT_MAIL;
 
 gulp.task('ship-to-private', function (done) {
+    // Check if there are commits before the current HEAD
+    var hasPreviousCommit = shelljs.exec('git rev-parse HEAD^', { silent: true }).code === 0;
+
+    if (!hasPreviousCommit) {
+        console.log('No previous commit. Exiting.');
+        done();
+        return;
+    }
+
     // Check for changes in the docs folder
-    var changes = shelljs.exec(`git diff --name-only`);
+    var changes = shelljs.exec('git diff --name-only HEAD^ HEAD');
     var changedFileNames = changes.stdout.split('\n');
 
     var docsChanges = changedFileNames.filter(fileName => fileName.startsWith('docs/'));
