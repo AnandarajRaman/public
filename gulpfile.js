@@ -17,65 +17,15 @@ var user = process.env.GIT_USER;
 var token = process.env.GIT_TOKEN;
 var user_mail = process.env.GIT_MAIL;
 
-gulp.task('ship-to-private', function (done) {
-    // Check for changes in the docs folder
-    var changes = shelljs.exec(`git diff --name-only`);
-    var changedFileNames = changes.stdout.split('\n');
-
-  var docsChanges = changedFileNames.filter(fileName => fileName.includes('docs/'));
-
-    // Check if there are any changes in the docs folder
-    if (docsChanges.length === 0) {
-        console.log('No changes in the docs folder. Exiting.');
-        done();
-        return;
-    }
-
-    // Clone the private repository into a temporary directory
-    var clonePath = './private-temp';
-    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
-    console.log('Clone of private repo started...');
-    var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`, { silent: false });
-
-    if (clone.code !== 0) {
-        console.error(clone.stderr);
-        done();
-        return;
-    }
-
-    console.log('Clone of private repo completed.');
-
-    // Copy changed files from the public docs folder to the private repo docs folder
-    shelljs.cd(clonePath);
-
-    // Copy only the changed files
-    for (var i = 0; i < docsChanges.length; i++) {
-        var changedFileName = docsChanges[i];
-        // Remove 'docs/' from the file path to get the relative path within the docs folder
-        var relativePath = changedFileName.replace(/^docs\//, '');
-        shelljs.cp('-rf', `../../${changedFileName}`, `./docs/${relativePath}`);
-    }
-
-    // Commit and push changes to the private repo
-    shelljs.exec('git add .');
-    shelljs.exec('git commit -m "Update from public repo"');
-    shelljs.exec('git push');
-
-    console.log('Changes synced to private repo.');
-    
-    // Cleanup: Remove the temporary clone directory
-    shelljs.cd('..'); // Move out of the clone directory
-    shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
-    done();
-});
-
 // gulp.task('ship-to-private', function (done) {
 //     // Check for changes in the docs folder
-//     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
-//     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
+//     var changes = shelljs.exec(`git diff --name-only`);
+//     var changedFileNames = changes.stdout.split('\n');
+
+//   var docsChanges = changedFileNames.filter(fileName => fileName.includes('docs/'));
 
 //     // Check if there are any changes in the docs folder
-//     if (changedFileNames.length === 0) {
+//     if (docsChanges.length === 0) {
 //         console.log('No changes in the docs folder. Exiting.');
 //         done();
 //         return;
@@ -99,9 +49,10 @@ gulp.task('ship-to-private', function (done) {
 //     shelljs.cd(clonePath);
 
 //     // Copy only the changed files
-//     for (var i = 0; i < changedFileNames.length; i++) {
-//         var changedFileName = changedFileNames[i];
-//         var relativePath = changedFileName.replace(/^docs\//, ''); // Remove 'docs/' from the file path to get the relative path within the docs folder
+//     for (var i = 0; i < docsChanges.length; i++) {
+//         var changedFileName = docsChanges[i];
+//         // Remove 'docs/' from the file path to get the relative path within the docs folder
+//         var relativePath = changedFileName.replace(/^docs\//, '');
 //         shelljs.cp('-rf', `../../${changedFileName}`, `./docs/${relativePath}`);
 //     }
 
@@ -117,6 +68,55 @@ gulp.task('ship-to-private', function (done) {
 //     shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
 //     done();
 // });
+
+gulp.task('ship-to-private', function (done) {
+    // Check for changes in the docs folder
+    var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
+    var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
+
+    // Check if there are any changes in the docs folder
+    if (changedFileNames.length === 0) {
+        console.log('No changes in the docs folder. Exiting.');
+        done();
+        return;
+    }
+
+    // Clone the private repository into a temporary directory
+    var clonePath = './private-temp';
+    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
+    console.log('Clone of private repo started...');
+    var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`, { silent: false });
+
+    if (clone.code !== 0) {
+        console.error(clone.stderr);
+        done();
+        return;
+    }
+
+    console.log('Clone of private repo completed.');
+
+    // Copy changed files from the public docs folder to the private repo docs folder
+    shelljs.cd(clonePath);
+
+    // Copy only the changed files
+    for (var i = 0; i < changedFileNames.length; i++) {
+        var changedFileName = changedFileNames[i];
+        var relativePath = changedFileName.replace(/^docs\//, ''); // Remove 'docs/' from the file path to get the relative path within the docs folder
+        shelljs.cp('-rf', `../../${changedFileName}`, `./docs/${relativePath}`);
+    }
+
+    // Commit and push changes to the private repo
+    shelljs.exec('git add .');
+    shelljs.exec('git commit -m "Update from public repo"');
+    shelljs.exec('git push');
+
+    console.log('Changes synced to private repo.');
+    
+    // Cleanup: Remove the temporary clone directory
+    shelljs.cd('..'); // Move out of the clone directory
+    shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
+    done();
+});
 
 
 // gulp.task('ship-to-private', function (done) {
