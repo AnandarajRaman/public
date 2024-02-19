@@ -17,19 +17,8 @@ jobs:
         with:
             fetch-depth: 2
 
-      - name: Set environment variables
-        uses: allenevans/set-env@v2.0.0
-        with:
-          GIT_USER: ${{ secrets.GIT_USERNAME }}
-          GIT_TOKEN: ${{ secrets.PRIVATE_REPO }}
-          GIT_MAIL: ${{ secrets.GIT_EMAIL }}
-
       - name: Install npm dependencies
         run: npm install
-            
-      - name: Get changed files
-        run: |
-            git diff --name-only HEAD^ HEAD
 
       - name: Sync
         run: npx gulp ship-to-private
