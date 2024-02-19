@@ -10,9 +10,12 @@ const { cd, exec } = require('shelljs');
 const { join } = require('path');
 var shelljs = require('shelljs');
 
-var user = process.env.GIT_USER;
-var token = process.env.GIT_TOKEN;
-var user_mail = process.env.GIT_MAIL;
+var user = process.env.GIT_USERNAME;
+var token = process.env.PRIVATE_REPO;
+var user_mail = process.env.GIT_EMAIL;
+// var user = process.env.GIT_USER;
+// var token = process.env.GIT_TOKEN;
+// var user_mail = process.env.GIT_MAIL;
 
 const spellings = [
     'boldreports',
