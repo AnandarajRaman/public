@@ -18,17 +18,8 @@ var token = process.env.GIT_TOKEN;
 var user_mail = process.env.GIT_MAIL;
 
 gulp.task('ship-to-private', function (done) {
-    // Check if there are commits before the current HEAD
-    var hasPreviousCommit = shelljs.exec('git rev-parse HEAD^', { silent: true }).code === 0;
-
-    if (!hasPreviousCommit) {
-        console.log('No previous commit. Exiting.');
-        done();
-        return;
-    }
-
     // Check for changes in the docs folder
-    var changes = shelljs.exec('git diff --name-only HEAD^ HEAD');
+    var changes = shelljs.exec(`git diff --name-only`);
     var changedFileNames = changes.stdout.split('\n');
 
     var docsChanges = changedFileNames.filter(fileName => fileName.startsWith('docs/'));
@@ -40,10 +31,11 @@ gulp.task('ship-to-private', function (done) {
         return;
     }
 
-    // Clone the private repository into the docs folder
+    // Clone the private repository into a temporary directory
+    var clonePath = './private-temp';
     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
     console.log('Clone of private repo started...');
-    var clone = shelljs.exec(`git clone ${gitPath} ./docs`, { silent: false });
+    var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`, { silent: false });
 
     if (clone.code !== 0) {
         console.error(clone.stderr);
@@ -53,13 +45,13 @@ gulp.task('ship-to-private', function (done) {
 
     console.log('Clone of private repo completed.');
 
-    // Copy changed files from the public docs folder to the private repo docs folder
-    shelljs.cd('./docs');
+    // Copy changed files from the public docs folder to the private repo
+    shelljs.cd(clonePath);
 
     // Copy only the changed files
     for (var i = 0; i < docsChanges.length; i++) {
         var changedFileName = docsChanges[i];
-        shelljs.cp('-rf', `../${changedFileName}`, '.');
+        shelljs.cp('-rf', `../../${changedFileName}`, '.');
     }
 
     // Commit and push changes to the private repo
@@ -68,9 +60,66 @@ gulp.task('ship-to-private', function (done) {
     shelljs.exec('git push');
 
     console.log('Changes synced to private repo.');
-    shelljs.cd('..'); // Return to the root directory
+    
+    // Cleanup: Remove the temporary clone directory
+    shelljs.cd('..'); // Move out of the clone directory
+    shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
     done();
 });
+// gulp.task('ship-to-private', function (done) {
+//     // Check if there are commits before the current HEAD
+//     var hasPreviousCommit = shelljs.exec('git rev-parse HEAD^', { silent: true }).code === 0;
+
+//     if (!hasPreviousCommit) {
+//         console.log('No previous commit. Exiting.');
+//         done();
+//         return;
+//     }
+
+//     // Check for changes in the docs folder
+//     var changes = shelljs.exec('git diff --name-only HEAD^ HEAD');
+//     var changedFileNames = changes.stdout.split('\n');
+
+//     var docsChanges = changedFileNames.filter(fileName => fileName.startsWith('docs/'));
+
+//     // Check if there are any changes in the docs folder
+//     if (docsChanges.length === 0) {
+//         console.log('No changes in the docs folder. Exiting.');
+//         done();
+//         return;
+//     }
+
+//     // Clone the private repository into the docs folder
+//     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
+//     console.log('Clone of private repo started...');
+//     var clone = shelljs.exec(`git clone ${gitPath} ./docs`, { silent: false });
+
+//     if (clone.code !== 0) {
+//         console.error(clone.stderr);
+//         done();
+//         return;
+//     }
+
+//     console.log('Clone of private repo completed.');
+
+//     // Copy changed files from the public docs folder to the private repo docs folder
+//     shelljs.cd('./docs');
+
+//     // Copy only the changed files
+//     for (var i = 0; i < docsChanges.length; i++) {
+//         var changedFileName = docsChanges[i];
+//         shelljs.cp('-rf', `../${changedFileName}`, '.');
+//     }
+
+//     // Commit and push changes to the private repo
+//     shelljs.exec('git add .');
+//     shelljs.exec('git commit -m "Update from public repo"');
+//     shelljs.exec('git push');
+
+//     console.log('Changes synced to private repo.');
+//     shelljs.cd('..'); // Return to the root directory
+//     done();
+// });
 
 
 // const gulp = require('gulp');
