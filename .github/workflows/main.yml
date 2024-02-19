@@ -23,10 +23,10 @@ jobs:
       - name: Sync
         run: npx gulp sync-to-private
         
-        # env:
-        #   GIT_USER: ${{ secrets.GIT_USERNAME }}
-        #   GIT_TOKEN: ${{ secrets.PRIVATE_REPO }}
-        #   GIT_MAIL: ${{ secrets.GIT_EMAIL }}
+        env:
+          GIT_USER: ${{ secrets.GIT_USERNAME }}
+          GIT_TOKEN: ${{ secrets.PRIVATE_REPO }}
+          GIT_MAIL: ${{ secrets.GIT_EMAIL }}
 
 # name: Sync Public to Private
 
