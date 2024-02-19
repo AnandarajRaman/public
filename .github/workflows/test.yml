@@ -16,17 +16,44 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Run Gulp tasks for validation
+      - name: Test
         run: npx gulp
+
+
+
+
+
+
+
+# name: Gulp Test on Pull Request
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   gulp_test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+
+#       - name: Install npm dependencies
+#         run: npm install
+
+#       - name: Run Gulp tasks for validation
+#         run: npx gulp
         
-      - name: Check Gulp tasks status
-        run: |
-          if [ $? -eq 0 ]; then
-            echo "All Gulp tasks passed successfully."
-          else
-            echo "Error: Gulp tasks failed. Fix the issues and try again."
-            exit 1
-          fi
+#       - name: Check Gulp tasks status
+#         run: |
+#           if [ $? -eq 0 ]; then
+#             echo "All Gulp tasks passed successfully."
+#           else
+#             echo "Error: Gulp tasks failed. Fix the issues and try again."
+#             exit 1
+#           fi
 
 
   #     - name: Check Gulp tasks status
