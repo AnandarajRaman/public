@@ -57,9 +57,8 @@ const spellings = [
     'wildcard'
 ];
 
+
 gulp.task('ship-to-private', function (done) {
-    console.log('---check----' + user_mail);
-    console.log('---user---' + user);
 
     shelljs.exec(`git config --global user.email "${user_mail}"`);
     shelljs.exec(`git config --global user.name "${user}"`);
@@ -104,6 +103,52 @@ gulp.task('ship-to-private', function (done) {
     shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
     done();
 });
+
+// gulp.task('ship-to-private', function (done) {
+
+//     shelljs.exec(`git config --global user.email "${user_mail}"`);
+//     shelljs.exec(`git config --global user.name "${user}"`);
+    
+//     // Check for changes in the docs folder
+//     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
+//     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
+
+//     // Check if there are any changes in the docs folder
+//     if (changedFileNames.length === 0) {
+//         console.log('No changes in the docs folder. Exiting.');
+//         done();
+//         return;
+//     }
+    
+//     // Clone the private repository into a temporary directory
+//     var clonePath = './private-temp';
+//     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
+//     console.log('Clone of private repo started...');
+//     var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`, { silent: false });
+
+//     if (clone.code !== 0) {
+//         console.error(clone.stderr);
+//         done();
+//         return;
+//     }
+
+//     console.log('Clone of private repo completed.');
+
+//     // Synchronize files from the public docs folder to the private repo docs folder using rsync
+//     shelljs.exec(`rsync -av --delete ./docs/ ${clonePath}/docs/`);
+
+//     // Commit and push changes to the private repo
+//     shelljs.cd(clonePath);
+//     shelljs.exec('git add .');
+//     shelljs.exec('git commit -m "Update from public repo"');
+//     shelljs.exec('git push');
+//     console.log('Changes synced to private repo.');
+    
+//     // Cleanup: Remove the temporary clone directory
+//     shelljs.cd('..'); // Move out of the clone directory
+//     shelljs.rm('-rf', clonePath); // Remove the temporary clone directory
+//     done();
+// });
 
 
 // gulp.task('ship-to-private', function (done) {
