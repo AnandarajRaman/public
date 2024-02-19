@@ -2,9 +2,9 @@ var fs = require('fs');
 var gulp = require('gulp');
 var shelljs = require('shelljs');
 
-var user = process.env.GIT_USERNAME;
-var token = process.env.PRIVATE_REPO;
-var user_mail = process.env.GIT_EMAIL;
+var user = process.env.GIT_USER;
+var token = process.env.GIT_TOKEN;
+var user_mail = process.env.GIT_MAIL;
 
 gulp.task('ship-to-private', function (done) {
     // Check for changes in the docs folder
@@ -51,7 +51,6 @@ gulp.task('ship-to-private', function (done) {
     shelljs.cd('..'); // Return to the root directory
     done();
 });
-
 
 
 // const gulp = require('gulp');
