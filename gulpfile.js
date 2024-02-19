@@ -1,5 +1,16 @@
-var fs = require('fs');
-var gulp = require('gulp');
+const gulp = require('gulp');
+const { sync } = require('glob');
+const md = require('markdownlint');
+const spellcheck = require('markdown-spellcheck');
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+const { writeFileSync, readFileSync, existsSync, mkdirSync } = require('fs');
+const { cd, exec } = require('shelljs');
+const { join } = require('path');
+
+// var fs = require('fs');
+// var gulp = require('gulp');
 var shelljs = require('shelljs');
 
 var user = process.env.GIT_USER;
@@ -73,83 +84,83 @@ gulp.task('ship-to-private', function (done) {
 // const { cd, exec } = require('shelljs');
 // const { join } = require('path');
 
-// gulp.task('md-lint', (done) => {
-//     const options = {
-//         files: sync('*.md').concat(sync('./docs/**/*.md')),
-//         config: require('./.markdownlint.json')
-//     };
-//     md(options, (result, err) => {
-//         if (err && err.toString().length) {
-//             console.error(err.toString());
-//             process.exit(1);
-//         } else {
-//             console.log('\n*** Markdown Lint Succeeded ***\n');
-//             done();
-//         }
-//     });
-// });
+gulp.task('md-lint', (done) => {
+    const options = {
+        files: sync('*.md').concat(sync('./docs/**/*.md')),
+        config: require('./.markdownlint.json')
+    };
+    md(options, (result, err) => {
+        if (err && err.toString().length) {
+            console.error(err.toString());
+            process.exit(1);
+        } else {
+            console.log('\n*** Markdown Lint Succeeded ***\n');
+            done();
+        }
+    });
+});
 
-// function getSpelling() {
-//     let spellingFile = join(__dirname + './spelling');
-//     let spelling = existsSync(spellingFile) ? '\n' + readFileSync(spellingFile, 'utf8') : '';
-//     return readFileSync('./.spelling', 'utf8') + spelling;
-// }
+function getSpelling() {
+    let spellingFile = join(__dirname + './spelling');
+    let spelling = existsSync(spellingFile) ? '\n' + readFileSync(spellingFile, 'utf8') : '';
+    return readFileSync('./.spelling', 'utf8') + spelling;
+}
 
-// gulp.task('typo', (done) => {
-//     // copy/paste .spelling file in .bin location
-//     writeFileSync('./node_modules/.bin/.spelling', getSpelling());
-//     // goto .bin location
-//     cd('./node_modules/.bin/');
-//     // run mdspell command
-//     const mdspellcmd = `mdspell ../../docs/**/*.md  -r -n -a -x --color --en-us`;
-//     const output = exec(mdspellcmd);
-//     // return root location
-//     cd('../../');
-//     if (output.code !== 0) {
-//         process.exit(1);
-//     }
-//     done();
-// });
+gulp.task('typo', (done) => {
+    // copy/paste .spelling file in .bin location
+    writeFileSync('./node_modules/.bin/.spelling', getSpelling());
+    // goto .bin location
+    cd('./node_modules/.bin/');
+    // run mdspell command
+    const mdspellcmd = `mdspell ../../docs/**/*.md  -r -n -a -x --color --en-us`;
+    const output = exec(mdspellcmd);
+    // return root location
+    cd('../../');
+    if (output.code !== 0) {
+        process.exit(1);
+    }
+    done();
+});
 
-// // Task for validating filenames
-// gulp.task('filename', (done) => {
-//     const docsPath = 'docs';
-//     const files = fs.readdirSync(docsPath);
+// Task for validating filenames
+gulp.task('filename', (done) => {
+    const docsPath = 'docs';
+    const files = fs.readdirSync(docsPath);
 
-//     files.forEach(file => {
-//         const fileName = path.basename(file);
-//         const fileNameWithoutExt = fileName.split('.')[0];
+    files.forEach(file => {
+        const fileName = path.basename(file);
+        const fileNameWithoutExt = fileName.split('.')[0];
 
-//         if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
-//             console.error(`Error: Invalid filename detected: ${fileName}`);
-//             process.exit(1);
-//         }
-//     });
+        if (fileName !== fileNameWithoutExt.toLowerCase() + '.md') {
+            console.error(`Error: Invalid filename detected: ${fileName}`);
+            process.exit(1);
+        }
+    });
 
-//     console.log('\n*** Filename Validation Succeeded ***\n');
-//     done();
-// });
+    console.log('\n*** Filename Validation Succeeded ***\n');
+    done();
+});
 
-// // Task for validating folder names
-// gulp.task('foldername', (done) => {
-//     const docsPath = 'docs';
-//     const folders = fs.readdirSync(docsPath);
+// Task for validating folder names
+gulp.task('foldername', (done) => {
+    const docsPath = 'docs';
+    const folders = fs.readdirSync(docsPath);
 
-//     folders.forEach(folder => {
-//         if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
+    folders.forEach(folder => {
+        if (!fs.statSync(path.join(docsPath, folder)).isDirectory()) return;
 
-//         if (folder !== folder.toLowerCase()) {
-//             console.error(`Error: Invalid folder name detected: ${folder}`);
-//             process.exit(1);
-//         }
-//     });
+        if (folder !== folder.toLowerCase()) {
+            console.error(`Error: Invalid folder name detected: ${folder}`);
+            process.exit(1);
+        }
+    });
 
-//     console.log('\n*** Foldername Validation Succeeded ***\n');
-//     done();
-// });
+    console.log('\n*** Foldername Validation Succeeded ***\n');
+    done();
+});
 
-// // Default task
-// gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
+// Default task
+gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
 
 
 
