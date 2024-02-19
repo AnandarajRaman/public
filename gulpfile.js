@@ -54,12 +54,12 @@ gulp.task('ship-to-private', function (done) {
     // Copy changed files from the public docs folder to the private repo docs folder
     shelljs.cd(clonePath);
     
-
-    // Iterate over each changed file in the docs folder
-    changedFileNames.forEach(changedFileName => {
-        // Copy the changed file from the public repository to the private repository docs folder
-        shelljs.cp('-rf', `../${changedFileName}`, `./docs/${changedFileName}`);
-    });
+    // Copy only the changed files
+    for (var i = 0; i < changedFileNames.length; i++) {
+        var changedFileName = changedFileNames[i];
+        var relativePath = changedFileName.replace(/^docs\//, ''); // Remove 'docs/' from the file path to get the relative path within the docs folder
+        shelljs.cp('-rf', `../${changedFileName}`, `./docs/${relativePath}`);
+    }
 
 
     // Commit and push changes to the private repo
