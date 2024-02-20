@@ -136,6 +136,7 @@ gulp.task('sync-to-private', function (done) {
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
         console.log('No changes in the docs folder. Exiting.');
+        done();
         return;
     }
     
