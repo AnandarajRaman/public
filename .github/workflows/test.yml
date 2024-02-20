@@ -1,75 +1,29 @@
-name: Test on Pull Request
+# Define GitHub Actions workflow to run tests on pull requests
 
+# Trigger the workflow on pull request events targeting the main branch
 on:
   pull_request:
     branches:
       - main
 
+# Define the jobs to be executed
 jobs:
+  # Define a job named "test" that runs on Ubuntu latest version
   test:
     runs-on: ubuntu-latest
 
+    # Define the steps to be executed within the job
     steps:
+      # Step 1: Checkout the repository with a depth of 2
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 2  # Limit the depth of history to speed up the checkout process
 
+      # Step 2: Install npm dependencies
       - name: Install npm dependencies
         run: npm install
 
+      # Step 3: Run tests
       - name: Test
-        run: npm run test
-
-
-
-
-
-
-
-# name: Gulp Test on Pull Request
-
-# on:
-#   pull_request:
-#     branches:
-#       - main
-
-# jobs:
-#   gulp_test:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
-
-#       - name: Install npm dependencies
-#         run: npm install
-
-#       - name: Run Gulp tasks for validation
-#         run: npx gulp
-        
-#       - name: Check Gulp tasks status
-#         run: |
-#           if [ $? -eq 0 ]; then
-#             echo "All Gulp tasks passed successfully."
-#           else
-#             echo "Error: Gulp tasks failed. Fix the issues and try again."
-#             exit 1
-#           fi
-
-
-  #     - name: Check Gulp tasks status
-  #       id: gulp_status
-  #       run: echo ::set-output name=status::$(if [ $? -eq 0 ]; then echo "success"; else echo "failure"; fi)
-
-  # merge_prevention:
-  #   needs: gulp_test
-  #   if: ${{ needs.gulp_test.outputs.status == 'failure' }}
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Fail Pull Request
-  #       run: |
-  #         echo "Gulp tests failed. This pull request cannot be merged."
-  #         exit 1
+        run: npm run test  # Execute the npm test script to run tests
