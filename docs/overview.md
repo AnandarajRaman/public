@@ -20,7 +20,7 @@ We can easily create report with no software to installation and no IT required.
 
 **Wide variety of date sources**: All the commonly used datasource such as Microsoft SQL Server, PostgreSQL and all the RESTful web services are supported.
 
-**Rich selection of data visualizations**: Bold Report Cloud include charts, grids and several powerful filtering possibilities using data picker and combo boxes.
+**Rich selection of data visualizations**: Bold Report Cloud include charts, grids and several powerful filtering possibilities using data picker and combo boxes hi.
 
 **Business user friendly**: Drag-friendly report designer allows business user to compose and publish report without any help from IT
 
