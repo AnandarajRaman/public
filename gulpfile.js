@@ -143,6 +143,7 @@ gulp.task('sync-to-private', function (done) {
     // Check for changes in the docs folder
     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
+    console.log('Changed file names:', changedFileNames);
 
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
@@ -153,7 +154,7 @@ gulp.task('sync-to-private', function (done) {
     
     // Clone the private repository into a temporary directory
     var clonePath = './private-temp';
-    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private1.git`;
+    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
     console.log('Clone of private repo started...');
     var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`);
 
