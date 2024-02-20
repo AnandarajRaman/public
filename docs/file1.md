@@ -3,3 +3,4 @@ file 1
 hello
 hi
 hi
+hi
