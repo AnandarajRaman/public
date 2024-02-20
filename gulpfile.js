@@ -130,14 +130,14 @@ gulp.task('sync-to-private', function (done) {
     shelljs.exec(`git config --global user.name "${user}"`);
     
     // Check for changes in the docs folder
-    var changes = shelljs.exec(`git diff --name-only `);
+    var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
 
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
         console.log('No changes in the docs folder. Exiting.');
         done();
-        process.exit(0);
+        return;
     }
     
     // Clone the private repository into a temporary directory
