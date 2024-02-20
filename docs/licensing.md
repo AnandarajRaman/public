@@ -39,7 +39,7 @@ Place the downloaded license key file in the Bold Reports installed location. Fo
 
    >By default, Bold Reports will be deployed on C:\BoldServices
 
-3. Restart the Bold Reports application.
+3. Restart the Bold Reports application
 
 ```steps
 The license key will expire based on the validity of the subscription.
