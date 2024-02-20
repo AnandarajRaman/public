@@ -148,6 +148,7 @@ gulp.task('sync-to-private', function (done) {
     if (changedFileNames.length === 0) {
         console.log('No changes in the docs folder. Exiting.');
         done();
+        return;
     }
     
     // Clone the private repository into a temporary directory
