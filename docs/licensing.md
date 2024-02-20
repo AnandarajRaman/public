@@ -6,7 +6,7 @@ platform: report-platform
 documentation: ug
 ---
 
-# Enterprise License overview
+# Enterprise License overview 
 
 Starting with the version v2.x, Bold Reports introduced a new licensing system.
 
