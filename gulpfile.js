@@ -143,7 +143,6 @@ gulp.task('sync-to-private', function (done) {
     // Check for changes in the docs folder
     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
-    console.log('Changed file names:', changedFileNames);
 
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
