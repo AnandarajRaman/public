@@ -141,26 +141,24 @@ gulp.task('sync-to-private', function (done) {
     shelljs.exec(`git config --global user.name "${user}"`);
     
     // Check for changes in the docs folder
-    var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
+    var changes = shelljs.exec(`git diff --name-only`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
 
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
         console.log('No changes in the docs folder. Exiting.');
         done();
-        return;
     }
     
     // Clone the private repository into a temporary directory
     var clonePath = './private-temp';
-    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
+    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private1.git`;
     console.log('Clone of private repo started...');
     var clone = shelljs.exec(`git clone ${gitPath} ${clonePath}`);
 
     if (clone.code !== 0) {
         console.error(clone.stderr);
-        done();
-        return;
+        process.exit(1);
     }
 
     console.log('Clone of private repo completed.');
