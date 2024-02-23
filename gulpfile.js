@@ -121,10 +121,10 @@ gulp.task('foldername', (done) => {
 });
 
 // Default task
-gulp.task('default', gulp.series('md-lint','typo','filename', 'foldername'));
+gulp.task('test', gulp.series('md-lint','typo','filename', 'foldername'));
 
 // Task to synchronize changes
-gulp.task('sync-to-private', function (done) {
+gulp.task('sync-to-repo', function (done) {
 
     shelljs.exec(`git config --global user.email "${user_mail}"`);
     shelljs.exec(`git config --global user.name "${user}"`);
