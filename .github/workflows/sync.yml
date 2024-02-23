@@ -26,6 +26,9 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Get changed files
+        run: git diff --name-only HEAD^ HEAD docs/
+
       # Step 3: Sync changes from public to private repository using Gulp
       - name: Sync
         run: npm run publish  # Run the Gulp task to synchronize changes
