@@ -28,7 +28,7 @@ jobs:
 
       # Step 3: Sync changes from public to private repository using Gulp
       - name: Sync
-        run: npx gulp sync-to-private  # Run the Gulp task to synchronize changes
+        run: npm run publish  # Run the Gulp task to synchronize changes
         
         # Set environment variables required by the Gulp task
         env:
