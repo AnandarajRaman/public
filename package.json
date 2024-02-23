@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Validation tasks for Markdown files",
   "scripts": {
-    "test": "gulp"
+    "test": "gulp test"
+    "publish": "gulp sync-to-repo"
   },
   "devDependencies": {
     "shelljs": "0.8.5",
