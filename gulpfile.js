@@ -133,6 +133,13 @@ gulp.task('sync-to-repo', function (done) {
     var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
     var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
 
+    console.log(changedFileNames);
+    console.log("\n");
+
+    var changedFileNames1 = changes.stdout.split('\n'); // Filter out any empty strings
+    console.log(changedFileNames1);
+
+
     // Check if there are any changes in the docs folder
     if (changedFileNames.length === 0) {
         console.log('No changes in the docs folder. Exiting.');
