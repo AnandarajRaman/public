@@ -4,7 +4,7 @@
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 # Define the jobs to be executed
 jobs:
