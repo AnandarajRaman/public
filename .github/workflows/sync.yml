@@ -4,7 +4,7 @@
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'docs/**'  # Watch for changes in the docs folder
 
