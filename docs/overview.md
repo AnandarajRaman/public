@@ -10,7 +10,7 @@ canonical: ''
 
 # Overview
 
-The Bold Reports is an online solution for analyzing data in web using the interactive reports with key metrics and tracking your business HI easily.
+The Bold Reports is an online solution for analyzing data in web using the interactive reports with key metrics and tracking your business HI Hi easily.
 
 It is an end-to-end solution for creating, managing, and sharing interactive business report that includes a powerful report designer for composing easily.
 
