@@ -146,7 +146,7 @@ gulp.task('sync-to-repo', function (done) {
     console.log('Clone of private repo completed.');
 
     // Synchronize files from the public docs folder to the private repo docs folder using rsync
-    shelljs.exec(`rsync -av ./docs/ ${clonePath}/docs/`);
+    shelljs.exec(`rsync -r ./docs/ ${clonePath}/docs/`);
 
     // Commit and push changes to the private repo
     shelljs.cd(clonePath);
