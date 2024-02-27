@@ -129,17 +129,6 @@ gulp.task('sync-to-repo', function (done) {
     shelljs.exec(`git config --global user.email "${user_mail}"`);
     shelljs.exec(`git config --global user.name "${user}"`);
     
-    // // Check for changes in the docs folder
-    // var changes = shelljs.exec(`git diff --name-only HEAD^ HEAD docs/`);
-    // var changedFileNames = changes.stdout.split('\n').filter(Boolean); // Filter out any empty strings
-
-    // // Check if there are any changes in the docs folder
-    // if (changedFileNames.length === 0) {
-    //     console.log('No changes in the docs folder. Exiting.');
-    //     done();
-    //     return;
-    // }
-    
     // Clone the private repository into a temporary directory
     var clonePath = './enterprise-docs';
     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
@@ -154,7 +143,7 @@ gulp.task('sync-to-repo', function (done) {
     console.log('Clone of private repo completed.');
 
     // Synchronize files from the public docs folder to the private repo docs folder using rsync
-    shelljs.exec(`rsync -av --delete ./docs/ ${clonePath}/docs/`);
+    shelljs.exec(`rsync ./docs/ ${clonePath}/docs/`);
 
     // Commit and push changes to the private repo
     shelljs.cd(clonePath);
