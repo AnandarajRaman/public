@@ -125,16 +125,18 @@ gulp.task('test', gulp.series('md-lint','typo','filename', 'foldername'));
 
 // Task to synchronize changes
 gulp.task('sync-to-repo', function (done) {
-
+    
+    var repoName = 'private';
+    var branchName = 'main';
+    
     shelljs.exec(`git config --global user.email "${user_mail}"`);
     shelljs.exec(`git config --global user.name "${user}"`);
     
     // Clone the private repository into a temporary directory
-    var clonePath = './enterprise-docs';
-    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
+    var clonePath =  `./${repoName}`;
+    var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/${repoName}.git`;
     console.log('Clone of private repo started...');
-    var clone = shelljs.exec(`git clone --depth=1 --branch=main ${gitPath} ${clonePath}`);
-
+    var clone = shelljs.exec(`git clone --depth=1 --branch=${branchName} ${gitPath} ${clonePath}`);
 
     if (clone.code !== 0) {
         console.error(clone.stderr);
