@@ -133,7 +133,8 @@ gulp.task('sync-to-repo', function (done) {
     var clonePath = './enterprise-docs';
     var gitPath = `https://${user}:${token}@github.com/AnandarajRaman/private.git`;
     console.log('Clone of private repo started...');
-    var clone = shelljs.exec(`git clone --depth=1 ${gitPath} ${clonePath}`);
+    var clone = shelljs.exec(`git clone --depth=1 --branch=main ${gitPath} ${clonePath}`);
+
 
     if (clone.code !== 0) {
         console.error(clone.stderr);
